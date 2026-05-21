@@ -1,0 +1,107 @@
+@import 'tailwindcss';
+@import './styles/tokens.css';
+
+@theme {
+  --color-bg: #07070d;
+  --color-glow: #8282d5;
+  --color-primary: #3d3da4;
+  --color-accent: #6565c0;
+  --color-text: #dddde6;
+  --color-text-muted: #737780;
+  --font-sans: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    @apply bg-bg text-text font-sans antialiased;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-primary) 40%, transparent);
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-glow) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .glow-border {
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-glow) 20%, transparent);
+  }
+
+  .split-heading {
+    line-height: 1.05;
+  }
+
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-body {
+    font-family: var(--font-sans);
+  }
+
+  .font-mono-label {
+    font-family: var(--font-mono);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  .hero-section.is-ready [data-reveal='mask'] {
+    clip-path: none !important;
+  }
+
+  .hero-section.is-ready [data-reveal]:not([data-reveal='mask']) {
+    opacity: 1 !important;
+  }
+
+  .hero-section.is-ready .split-word {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .hero-headline .split-word-wrap {
+    margin-bottom: 0;
+    overflow: hidden;
+    padding-top: 0.14em;
+    padding-bottom: 0.32em;
+    vertical-align: top;
+  }
+
+  .hero-headline__brand .split-word-wrap--descender {
+    padding-top: 0.12em;
+    padding-bottom: clamp(0.38em, 1.2vw, 0.58em);
+  }
+
+  .hero-headline .split-word-wrap--descender {
+    padding-bottom: 0.42em;
+  }
+
+  .hero-headline .split-word-wrap--italic {
+    padding-top: 0.2em;
+    padding-bottom: 0.48em;
+  }
+
+  .hero-section.is-ready .hero-headline .split-word-wrap {
+    margin-bottom: 0;
+    overflow: visible;
+    padding-bottom: 0;
+    padding-top: 0;
+  }
+}
