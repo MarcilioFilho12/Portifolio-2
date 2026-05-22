@@ -81,8 +81,14 @@ export interface StarfieldHandle {
   dispose: () => void
 }
 
-export function createStarfield(width: number, height: number): StarfieldHandle {
-  const particleCount = Math.min(1100, Math.floor((width * height) / 1100))
+export function createStarfield(
+  width: number,
+  height: number,
+  options?: { lite?: boolean },
+): StarfieldHandle {
+  const density = options?.lite ? 1800 : 1100
+  const cap = options?.lite ? 520 : 1100
+  const particleCount = Math.min(cap, Math.floor((width * height) / density))
   const positions = new Float32Array(particleCount * 3)
   const colors = new Float32Array(particleCount * 3)
   const sizes = new Float32Array(particleCount)

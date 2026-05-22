@@ -9,6 +9,11 @@ export const WHEEL_SENSITIVITY = 0.002
 
 export const BRAIN_ROTATION_LERP = 0.12
 
+/** Rotação contínua lenta no mobile (rad/s) */
+export const BRAIN_AUTO_ROTATE_SPEED = 0.1
+
+export const MOBILE_PIXEL_RATIO_CAP = 1.35
+
 export const HERO_COLORS = {
   bg: 0x07070d,
   glow: 0x8282d5,

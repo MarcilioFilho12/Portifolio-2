@@ -17,7 +17,7 @@ export function useVideoOnScroll(
     const video = videoRef.value
     if (!section || !video) return
 
-    const canPlayVideo = () => !shouldReduceMotion.value && !isMobile.value
+    const canPlayVideo = () => !shouldReduceMotion.value
 
     observer = new IntersectionObserver(
       (entries) => {
@@ -25,6 +25,9 @@ export function useVideoOnScroll(
         if (!entry) return
 
         if (entry.isIntersecting && canPlayVideo()) {
+          if (isMobile.value) {
+            video.playbackRate = 0.85
+          }
           void video.play().then(() => {
             isPlaying.value = true
           }).catch(() => {
@@ -35,7 +38,7 @@ export function useVideoOnScroll(
           isPlaying.value = false
         }
       },
-      { threshold: 0.35 },
+      { threshold: isMobile.value ? 0.2 : 0.35 },
     )
 
     observer.observe(section)

@@ -20,7 +20,7 @@ const { t } = useLocale()
     <p class="sr-only">{{ t('cinematic.srOnly') }}</p>
 
     <div
-      v-if="shouldReduceMotion || isMobile"
+      v-if="shouldReduceMotion"
       class="absolute inset-0 bg-[radial-gradient(circle_at_center,color-mix(in_srgb,#6565c0_25%,transparent),#07070d)]"
       aria-hidden="true"
     />
@@ -28,11 +28,12 @@ const { t } = useLocale()
     <video
       v-else
       ref="videoRef"
-      class="absolute inset-0 h-full w-full object-cover"
+      class="cinematic-video absolute inset-0 h-full w-full object-cover"
+      :class="isMobile ? 'cinematic-video--mobile' : ''"
       muted
       loop
       playsinline
-      preload="none"
+      :preload="isMobile ? 'metadata' : 'none'"
       aria-hidden="true"
       poster="/media/kling-poster.svg"
     >
@@ -45,6 +46,11 @@ const { t } = useLocale()
     />
     <div
       class="pointer-events-none absolute inset-0 bg-gradient-to-r from-bg/40 via-transparent to-bg/40"
+      aria-hidden="true"
+    />
+    <div
+      v-if="isMobile && !shouldReduceMotion"
+      class="pointer-events-none absolute inset-0 bg-bg/25"
       aria-hidden="true"
     />
 
@@ -61,3 +67,11 @@ const { t } = useLocale()
     </div>
   </section>
 </template>
+
+<style scoped>
+.cinematic-video--mobile {
+  opacity: 0.88;
+  filter: saturate(0.9) contrast(1.02);
+  transform: scale(1.02);
+}
+</style>

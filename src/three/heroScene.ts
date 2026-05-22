@@ -1,7 +1,21 @@
 import * as THREE from 'three'
-import { BRAIN_ROTATION_LERP, CAMERA, HERO_COLORS, WHEEL_SENSITIVITY } from './heroConfig'
+import {
+  BRAIN_AUTO_ROTATE_SPEED,
+  BRAIN_ROTATION_LERP,
+  CAMERA,
+  HERO_COLORS,
+  MOBILE_PIXEL_RATIO_CAP,
+  WHEEL_SENSITIVITY,
+} from './heroConfig'
 import { disposeBrain, loadBrainModel } from './loadBrainModel'
 import { createStarfield, STARFIELD_PIXEL_RATIO_CAP } from './starfield'
+
+export interface HeroSceneOptions {
+  /** Menos partículas, sem antialias, pixel ratio menor */
+  lite?: boolean
+  /** Rotação contínua do cérebro (mobile) */
+  autoRotate?: boolean
+}
 
 export interface HeroSceneHandle {
   resize: () => void
@@ -10,9 +24,14 @@ export interface HeroSceneHandle {
   dispose: () => void
 }
 
-export function createHeroScene(container: HTMLElement): HeroSceneHandle {
+export function createHeroScene(
+  container: HTMLElement,
+  options: HeroSceneOptions = {},
+): HeroSceneHandle {
+  const { lite = false, autoRotate = false } = options
   const width = container.clientWidth || window.innerWidth
   const height = container.clientHeight || window.innerHeight
+  const pixelCap = lite ? MOBILE_PIXEL_RATIO_CAP : STARFIELD_PIXEL_RATIO_CAP
 
   const scene = new THREE.Scene()
   scene.fog = new THREE.FogExp2(HERO_COLORS.bg, CAMERA.fogDensity)
@@ -22,15 +41,15 @@ export function createHeroScene(container: HTMLElement): HeroSceneHandle {
 
   const renderer = new THREE.WebGLRenderer({
     alpha: true,
-    antialias: true,
-    powerPreference: 'high-performance',
+    antialias: !lite,
+    powerPreference: lite ? 'default' : 'high-performance',
   })
   renderer.setSize(width, height)
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, STARFIELD_PIXEL_RATIO_CAP))
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, pixelCap))
   renderer.setClearColor(0x000000, 0)
   container.appendChild(renderer.domElement)
 
-  const starfield = createStarfield(width, height)
+  const starfield = createStarfield(width, height, { lite })
   const points = starfield.points
   scene.add(points)
 
@@ -38,9 +57,9 @@ export function createHeroScene(container: HTMLElement): HeroSceneHandle {
   brainHolder.renderOrder = 1
   scene.add(brainHolder)
 
-  scene.add(new THREE.AmbientLight(HERO_COLORS.glow, 0.15))
+  scene.add(new THREE.AmbientLight(HERO_COLORS.glow, lite ? 0.12 : 0.15))
 
-  const keyLight = new THREE.DirectionalLight(HERO_COLORS.glow, 0.35)
+  const keyLight = new THREE.DirectionalLight(HERO_COLORS.glow, lite ? 0.28 : 0.35)
   keyLight.position.set(5, 10, 16)
   scene.add(keyLight)
 
@@ -71,19 +90,26 @@ export function createHeroScene(container: HTMLElement): HeroSceneHandle {
   })
 
   const tick = () => {
+    const delta = clock.getDelta()
     const t = clock.getElapsedTime()
 
     starfield.setTime(t)
 
-    points.rotation.y = t * 0.04 + pointerX * 0.15
-    points.rotation.x = pointerY * 0.08
+    const starSpeed = lite ? 0.03 : 0.04
+    points.rotation.y = t * starSpeed + pointerX * 0.12
+    points.rotation.x = pointerY * 0.06
+
+    if (autoRotate) {
+      brainRotationTarget += delta * BRAIN_AUTO_ROTATE_SPEED
+    }
 
     brainRotationCurrent +=
       (brainRotationTarget - brainRotationCurrent) * BRAIN_ROTATION_LERP
 
     if (brainRoot) {
+      const fadeStep = lite ? 0.035 : 0.02
       if (brainOpacity < 1) {
-        brainOpacity = Math.min(1, brainOpacity + 0.02)
+        brainOpacity = Math.min(1, brainOpacity + fadeStep)
         brainRoot.visible = true
         brainRoot.traverse((obj) => {
           const mesh = obj as THREE.Mesh
@@ -99,8 +125,9 @@ export function createHeroScene(container: HTMLElement): HeroSceneHandle {
       brainRoot.rotation.y = brainRotationCurrent
     }
 
-    camera.position.x += (pointerX * 2 - camera.position.x) * 0.05
-    camera.position.y += (-pointerY * 1.2 - camera.position.y) * 0.05
+    const parallax = lite ? 1.4 : 2
+    camera.position.x += (pointerX * parallax - camera.position.x) * 0.05
+    camera.position.y += (-pointerY * (parallax * 0.6) - camera.position.y) * 0.05
     camera.lookAt(0, 0, 0)
     renderer.render(scene, camera)
     rafId = requestAnimationFrame(tick)
@@ -113,7 +140,7 @@ export function createHeroScene(container: HTMLElement): HeroSceneHandle {
     const h = container.clientHeight || window.innerHeight
     camera.aspect = w / h
     camera.updateProjectionMatrix()
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, STARFIELD_PIXEL_RATIO_CAP))
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, pixelCap))
     renderer.setSize(w, h)
   }
 

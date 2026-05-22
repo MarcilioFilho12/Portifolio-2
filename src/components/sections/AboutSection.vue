@@ -2,21 +2,49 @@
 import { onMounted, onUnmounted, ref } from 'vue'
 import SectionReveal from '@/components/ui/SectionReveal.vue'
 import { useReducedMotion } from '@/composables/useReducedMotion'
+import { useMediaQuery } from '@/composables/useMediaQuery'
 import { useLocale } from '@/composables/useLocale'
 
 const ABOUT_VIDEO = '/media/about-ai-man-nod.mp4'
 
 const { shouldReduceMotion } = useReducedMotion()
+const { matches: isMobile } = useMediaQuery('(max-width: 768px)')
 const { t } = useLocale()
 const videoRef = ref<HTMLVideoElement | null>(null)
+const mediaRef = ref<HTMLElement | null>(null)
+let observer: IntersectionObserver | null = null
 
-onMounted(() => {
+const playVideo = () => {
   const video = videoRef.value
   if (!video || shouldReduceMotion.value) return
+  if (isMobile.value) video.playbackRate = 0.9
   video.play().catch(() => {})
+}
+
+onMounted(() => {
+  const root = mediaRef.value
+  const video = videoRef.value
+  if (!video || shouldReduceMotion.value) return
+
+  if (!root) {
+    playVideo()
+    return
+  }
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      const entry = entries[0]
+      if (!entry) return
+      if (entry.isIntersecting) playVideo()
+      else video.pause()
+    },
+    { threshold: 0.25 },
+  )
+  observer.observe(root)
 })
 
 onUnmounted(() => {
+  observer?.disconnect()
   videoRef.value?.pause()
 })
 </script>
@@ -37,16 +65,20 @@ onUnmounted(() => {
         </p>
       </div>
 
-      <div class="glow-border relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-2xl bg-bg/80">
+      <div
+        ref="mediaRef"
+        class="glow-border relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-2xl bg-bg/80"
+      >
         <video
           v-if="!shouldReduceMotion"
           ref="videoRef"
           class="h-full w-full object-cover"
+          :class="isMobile ? 'opacity-90 saturate-90' : ''"
           :src="ABOUT_VIDEO"
           muted
           loop
           playsinline
-          preload="metadata"
+          :preload="isMobile ? 'metadata' : 'auto'"
           :aria-label="t('about.videoLabel')"
         />
         <div
