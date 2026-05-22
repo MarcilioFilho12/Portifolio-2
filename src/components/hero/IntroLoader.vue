@@ -2,6 +2,9 @@
 import { onMounted, onUnmounted, ref } from 'vue'
 import { gsap, registerGsap } from '@/composables/useGsap'
 import { useReducedMotion } from '@/composables/useReducedMotion'
+import { useLocale } from '@/composables/useLocale'
+
+const { t } = useLocale()
 
 const STORAGE_KEY = 'portfolio-intro-seen'
 
@@ -76,7 +79,7 @@ onUnmounted(() => {
     class="intro-loader fixed inset-0 z-[100] flex flex-col items-center justify-center bg-bg"
     role="dialog"
     aria-modal="true"
-    aria-label="Introdução do portfólio"
+    :aria-label="t('intro.ariaLabel')"
   >
     <div data-intro="logo" class="mb-10 flex flex-col items-center gap-4">
       <svg class="h-14 w-14 text-glow" viewBox="0 0 48 48" fill="none" aria-hidden="true">
@@ -102,7 +105,7 @@ onUnmounted(() => {
           M
         </text>
       </svg>
-      <p class="text-xs uppercase tracking-[0.22em] text-text-muted">Marcílio Alano</p>
+      <p class="text-xs uppercase tracking-[0.22em] text-text-muted">{{ t('intro.name') }}</p>
     </div>
 
     <div
@@ -116,7 +119,7 @@ onUnmounted(() => {
       class="intro-loader__skip absolute bottom-10 right-10 text-xs uppercase tracking-widest text-text-muted transition-colors hover:text-text"
       @click="skip"
     >
-      Pular intro
+      {{ t('intro.skip') }}
     </button>
   </div>
 </template>

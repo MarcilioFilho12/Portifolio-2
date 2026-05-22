@@ -1,8 +1,12 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useLocale } from '@/composables/useLocale'
+
+const { t } = useLocale()
+</script>
 
 <template>
   <div data-reveal="discover" class="scroll-comet flex flex-col items-start gap-3">
-    <span class="font-mono-label text-[10px] text-text-muted">Scroll to enter</span>
+    <span class="font-mono-label text-[10px] text-text-muted">{{ t('hero.scrollEnter') }}</span>
     <div class="scroll-comet__rail" aria-hidden="true" />
   </div>
 </template>

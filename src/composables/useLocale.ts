@@ -4,9 +4,9 @@ import { messages, type Locale } from '@/i18n/messages'
 const STORAGE_KEY = 'portfolio-locale'
 
 function readStoredLocale(): Locale {
-  if (typeof window === 'undefined') return 'en'
+  if (typeof window === 'undefined') return 'pt'
   const stored = localStorage.getItem(STORAGE_KEY)
-  return stored === 'pt' || stored === 'en' ? stored : 'en'
+  return stored === 'pt' || stored === 'en' ? stored : 'pt'
 }
 
 const locale = ref<Locale>(readStoredLocale())

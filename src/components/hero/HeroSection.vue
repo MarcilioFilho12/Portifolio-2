@@ -7,6 +7,7 @@ import HeroMetaFrame from '@/components/hero/HeroMetaFrame.vue'
 import HeroFooter from '@/components/hero/HeroFooter.vue'
 import FrameCorners from '@/components/hero/FrameCorners.vue'
 import SecondaryLink from '@/components/ui/SecondaryLink.vue'
+import HoverButton from '@/components/ui/HoverButton.vue'
 import ScrollComet from '@/components/hero/ScrollComet.vue'
 import { useHeroEntrance } from '@/composables/useHeroEntrance'
 import { useLocale } from '@/composables/useLocale'
@@ -72,22 +73,18 @@ useHeroEntrance(heroRef, ready)
           </p>
 
           <div class="mt-10 flex flex-wrap items-center justify-start gap-5">
-            <a
+            <HoverButton
               data-reveal="cta"
               href="#projetos"
+              variant="primary"
               data-testid="hero-cta-primary"
-              class="group relative inline-flex items-center gap-3 rounded-full bg-text px-6 py-3 text-sm font-medium text-bg transition-transform duration-500 hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-glow"
             >
-              <span class="relative z-10">{{ t('hero.ctaWork') }}</span>
+              {{ t('hero.ctaWork') }}
               <span
-                class="relative z-10 transition-transform duration-300 group-hover:translate-x-0.5"
+                class="transition-transform duration-300 group-hover:translate-x-0.5"
                 aria-hidden="true"
               >→</span>
-              <span
-                class="pointer-events-none absolute inset-0 rounded-full bg-glow opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-50"
-                aria-hidden="true"
-              />
-            </a>
+            </HoverButton>
             <span data-reveal="cta">
               <SecondaryLink href="#contato" :label="t('hero.ctaContact')" />
             </span>

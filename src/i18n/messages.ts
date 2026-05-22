@@ -4,7 +4,7 @@ export const messages = {
   pt: {
     nav: {
       work: 'Projetos',
-      expertise: 'Expertise',
+      expertise: 'Especialidades',
       experience: 'Sobre',
       getInTouch: 'Fale comigo',
       creativeDeveloper: '/ Desenvolvedor criativo',
@@ -13,6 +13,20 @@ export const messages = {
       mainNav: 'Navegação principal',
     },
     hero: {
+      headline: {
+        brandWeb: 'Web',
+        brandDesign: 'Design',
+        ledeWords: ['unindo', 'o', 'melhor', 'dos', 'mundos,'] as const,
+        ledeEmphasis: 'melhor',
+        tags: [
+          { word: 'código,', glow: true, italic: false },
+          { word: '3D,', glow: true, italic: false },
+          { word: 'arte', glow: false, italic: true },
+          { word: 'criativa', glow: false, italic: true },
+          { word: 'e', glow: false, italic: false },
+          { word: 'cinema.', glow: false, italic: false },
+        ] as const,
+      },
       metaFolio: 'Folio / 2026 — Vol.01',
       metaCinematic: '— Um portfólio cinematográfico',
       metaLocation: 'Lisboa · Latitude 38.7°N',
@@ -27,7 +41,7 @@ export const messages = {
       nowPlaying: 'Em reprodução',
       nowPlayingTrack: 'Intro / Reel ’26',
       srOnly:
-        'WebDesgin — unindo o melhor dos mundos: código, 3D, arte criativa e cinema. Use a roda do mouse nesta seção para girar o modelo 3D do cérebro.',
+        'Web Design — unindo o melhor dos mundos: código, 3D, arte criativa e cinema. Use a roda do mouse nesta seção para girar o modelo 3D do cérebro.',
     },
     cinematic: {
       sectionLabel: 'Experiência cinematográfica',
@@ -40,33 +54,43 @@ export const messages = {
       title: 'Projetos selecionados',
       subtitle: 'Checkout digital e landing de marca — design e front-end em produção.',
       soumed: {
+        category: 'Front-end',
         description: 'Checkout e fluxos digitais para operação de convênio médico.',
         imageAlt: 'Soumed checkout — formulário de dados pessoais e pagamento',
       },
       chamateria: {
+        category: 'Design web',
         description:
           'Landing tropical Mati Chamateria — erva-mate e rum artesanal, cultura de rua em Praia do Rosa.',
         imageAlt: 'Mati Chamateria — hero Praia do Rosa, erva-mate e rum artesanal',
       },
     },
     skills: {
-      label: 'Expertise',
-      title: 'Craft entre código, motion e 3D',
-      body: 'Arquitetura frontend, interfaces cinematográficas e WebGL — com performance e acessibilidade.',
+      label: 'Especialidades',
+      title: 'Arte entre código, motion e 3D',
+      body: 'Arquitetura front-end, interfaces cinematográficas e WebGL — com performance e acessibilidade.',
     },
     about: {
       label: 'Sobre',
       title: 'Marcílio Alano Filho',
-      p1: 'Desenvolvedor frontend focado em interfaces performáticas, design systems e integrações. Experiência em ecossistemas de saúde, MVPs e produtos digitais com Vue e React.',
+      p1: 'Desenvolvedor front-end focado em interfaces performáticas, design systems e integrações. Experiência em ecossistemas de saúde, MVPs e produtos digitais com Vue e React.',
       p2: 'Este portfólio segue desenvolvimento evolutivo em camadas — conteúdo primeiro, motion e WebGL depois.',
       videoLabel: 'Vídeo ilustrativo — figura digital em movimento',
       staticPreview: 'Prévia estática da seção sobre',
-      reducedMotion: 'Motion reduzido',
+      reducedMotion: 'Movimento reduzido',
+    },
+    intro: {
+      ariaLabel: 'Introdução do portfólio',
+      skip: 'Pular intro',
+      name: 'Marcílio Alano',
+    },
+    common: {
+      techStack: 'Tecnologias',
     },
     contact: {
       label: 'Contato',
       title: 'Vamos construir algo memorável',
-      body: 'Disponível para projetos frontend, consultoria de UI e colaborações criativas.',
+      body: 'Disponível para projetos front-end, consultoria de UI e colaborações criativas.',
       whatsapp: 'WhatsApp',
       cvEn: 'CV (English)',
       cvPt: 'CV (Português)',
@@ -95,6 +119,20 @@ export const messages = {
       mainNav: 'Main navigation',
     },
     hero: {
+      headline: {
+        brandWeb: 'Web',
+        brandDesign: 'Design',
+        ledeWords: ['uniting', 'the', 'best', 'of', 'worlds,'] as const,
+        ledeEmphasis: 'best',
+        tags: [
+          { word: 'code,', glow: true, italic: false },
+          { word: '3D,', glow: true, italic: false },
+          { word: 'creative', glow: false, italic: true },
+          { word: 'art', glow: false, italic: true },
+          { word: '&', glow: false, italic: false },
+          { word: 'cinema.', glow: false, italic: false },
+        ] as const,
+      },
       metaFolio: 'Folio / 2026 — Vol.01',
       metaCinematic: '— A cinematic folio',
       metaLocation: 'Lisbon · Latitude 38.7°N',
@@ -122,10 +160,12 @@ export const messages = {
       title: 'Selected projects',
       subtitle: 'Digital checkout and brand landing — design and front-end in production.',
       soumed: {
+        category: 'Frontend',
         description: 'Checkout and digital flows for medical plan operations.',
         imageAlt: 'Soumed checkout — personal data and payment form',
       },
       chamateria: {
+        category: 'Web Design',
         description:
           'Tropical Mati Chamateria landing — yerba mate and artisan rum, street culture in Praia do Rosa.',
         imageAlt: 'Mati Chamateria — Praia do Rosa hero, yerba mate and artisan rum',
@@ -145,6 +185,14 @@ export const messages = {
       staticPreview: 'Static preview of the about section',
       reducedMotion: 'Reduced motion',
     },
+    intro: {
+      ariaLabel: 'Portfolio introduction',
+      skip: 'Skip intro',
+      name: 'Marcílio Alano',
+    },
+    common: {
+      techStack: 'Technologies',
+    },
     contact: {
       label: 'Contact',
       title: "Let's build something memorable",
@@ -155,7 +203,7 @@ export const messages = {
     },
     footer: {
       tagline: 'Vue 3 · TypeScript · Motion design',
-      socialNav: 'Redes sociais',
+      socialNav: 'Social links',
     },
     meta: {
       title: 'Marcílio Alano Filho | Frontend Developer',

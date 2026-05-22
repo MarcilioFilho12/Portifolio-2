@@ -10,6 +10,7 @@ export function useProjects() {
       if (p.id === 'soumed') {
         return {
           ...p,
+          category: t('projects.soumed.category'),
           description: t('projects.soumed.description'),
           imageAlt: t('projects.soumed.imageAlt'),
         }
@@ -17,6 +18,7 @@ export function useProjects() {
       if (p.id === 'chamateria') {
         return {
           ...p,
+          category: t('projects.chamateria.category'),
           description: t('projects.chamateria.description'),
           imageAlt: t('projects.chamateria.imageAlt'),
         }

@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import type { Project } from '@/data/projects'
 import GlassCard from '@/components/ui/GlassCard.vue'
+import { useLocale } from '@/composables/useLocale'
 
 defineProps<{ project: Project }>()
+
+const { t } = useLocale()
 </script>
 
 <template>
@@ -50,7 +53,7 @@ defineProps<{ project: Project }>()
           >↗</span>
         </h3>
         <p class="mt-2 text-sm text-text-muted">{{ project.description }}</p>
-        <ul class="mt-4 flex flex-wrap gap-2" aria-label="Tecnologias">
+        <ul class="mt-4 flex flex-wrap gap-2" :aria-label="t('common.techStack')">
           <li
             v-for="tag in project.stack"
             :key="tag"
