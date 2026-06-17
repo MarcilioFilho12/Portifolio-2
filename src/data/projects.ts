@@ -22,7 +22,7 @@ export const projects: Project[] = [
       'Site da recreação infantil em Garopaba — acolhimento, rotina vespertina e contato com as famílias.',
     stack: ['Vue 3', 'TypeScript', 'Tailwind CSS'],
     href: 'https://passoa-passo.vercel.app/',
-    image: '/media/projects/passo-a-passo.svg',
+    image: '/media/projects/passo-a-passo.png',
     imageAlt: 'Passo a Passo Recreação Infantil — hero acolhedor',
     imageBg: '#faf6f0',
     imageFit: 'cover',
