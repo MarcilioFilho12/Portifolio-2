@@ -9,7 +9,9 @@ import FrameCorners from '@/components/hero/FrameCorners.vue'
 import SecondaryLink from '@/components/ui/SecondaryLink.vue'
 import HoverButton from '@/components/ui/HoverButton.vue'
 import ScrollComet from '@/components/hero/ScrollComet.vue'
-import { useHeroEntrance } from '@/composables/useHeroEntrance'
+import { HERO_INTRO_KEY, useHeroEntrance } from '@/composables/useHeroEntrance'
+import { useLowPower } from '@/composables/useLowPower'
+import { useReducedMotion } from '@/composables/useReducedMotion'
 import { useLocale } from '@/composables/useLocale'
 
 const { t } = useLocale()
@@ -20,7 +22,17 @@ const props = defineProps<{
 
 const heroRef = ref<HTMLElement | null>(null)
 const ready = computed(() => props.entranceReady ?? true)
-useHeroEntrance(heroRef, ready)
+const { isLowPower } = useLowPower()
+const { shouldReduceMotion } = useReducedMotion()
+
+const introSeenOnLoad =
+  typeof sessionStorage !== 'undefined' && !!sessionStorage.getItem(HERO_INTRO_KEY)
+
+const isHeroReady = ref(
+  introSeenOnLoad || isLowPower.value || shouldReduceMotion.value,
+)
+
+useHeroEntrance(heroRef, ready, isHeroReady)
 </script>
 
 <template>
@@ -28,6 +40,7 @@ useHeroEntrance(heroRef, ready)
     id="hero"
     ref="heroRef"
     class="hero-section relative flex min-h-[100dvh] w-full flex-col overflow-hidden bg-bg"
+    :class="{ 'is-ready': isHeroReady }"
     aria-labelledby="hero-title"
   >
     <p class="sr-only">{{ t('hero.srOnly') }}</p>

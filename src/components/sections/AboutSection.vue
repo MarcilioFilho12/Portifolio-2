@@ -1,30 +1,32 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import SectionReveal from '@/components/ui/SectionReveal.vue'
 import { useReducedMotion } from '@/composables/useReducedMotion'
-import { useMediaQuery } from '@/composables/useMediaQuery'
+import { useLowPower } from '@/composables/useLowPower'
 import { useLocale } from '@/composables/useLocale'
 
 const ABOUT_VIDEO = '/media/about-ai-man-nod.mp4'
 
 const { shouldReduceMotion } = useReducedMotion()
-const { matches: isMobile } = useMediaQuery('(max-width: 768px)')
+const { isLowPower } = useLowPower()
 const { t } = useLocale()
 const videoRef = ref<HTMLVideoElement | null>(null)
 const mediaRef = ref<HTMLElement | null>(null)
 let observer: IntersectionObserver | null = null
 
+const useStaticPreview = computed(() => shouldReduceMotion.value)
+
 const playVideo = () => {
   const video = videoRef.value
-  if (!video || shouldReduceMotion.value) return
-  if (isMobile.value) video.playbackRate = 0.9
+  if (!video || useStaticPreview.value) return
+  if (isLowPower.value) video.playbackRate = 0.9
   video.play().catch(() => {})
 }
 
 onMounted(() => {
   const root = mediaRef.value
   const video = videoRef.value
-  if (!video || shouldReduceMotion.value) return
+  if (!video || useStaticPreview.value) return
 
   if (!root) {
     playVideo()
@@ -38,7 +40,7 @@ onMounted(() => {
       if (entry.isIntersecting) playVideo()
       else video.pause()
     },
-    { threshold: 0.25 },
+    { threshold: isLowPower.value ? 0.2 : 0.25 },
   )
   observer.observe(root)
 })
@@ -70,15 +72,15 @@ onUnmounted(() => {
         class="glow-border relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-2xl bg-bg/80"
       >
         <video
-          v-if="!shouldReduceMotion"
+          v-if="!useStaticPreview"
           ref="videoRef"
           class="h-full w-full object-cover"
-          :class="isMobile ? 'opacity-90 saturate-90' : ''"
+          :class="isLowPower ? 'opacity-95' : ''"
           :src="ABOUT_VIDEO"
           muted
           loop
           playsinline
-          :preload="isMobile ? 'metadata' : 'auto'"
+          :preload="isLowPower ? 'metadata' : 'auto'"
           :aria-label="t('about.videoLabel')"
         />
         <div
@@ -86,9 +88,7 @@ onUnmounted(() => {
           class="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/25 via-glow/15 to-bg"
           role="img"
           :aria-label="t('about.staticPreview')"
-        >
-          <span class="font-mono-label text-[10px] text-glow/70">{{ t('about.reducedMotion') }}</span>
-        </div>
+        />
         <div
           class="pointer-events-none absolute inset-0 bg-gradient-to-t from-bg/50 via-transparent to-transparent"
           aria-hidden="true"

@@ -4,7 +4,7 @@ import ProjectCard from './ProjectCard.vue'
 import SectionReveal from '@/components/ui/SectionReveal.vue'
 import { gsap, registerGsap } from '@/composables/useGsap'
 import { useReducedMotion } from '@/composables/useReducedMotion'
-import { useMediaQuery } from '@/composables/useMediaQuery'
+import { useLowPower } from '@/composables/useLowPower'
 import { useProjects } from '@/composables/useProjects'
 import { useLocale } from '@/composables/useLocale'
 
@@ -13,13 +13,13 @@ const { t } = useLocale()
 
 const gridRef = ref<HTMLElement | null>(null)
 const { shouldReduceMotion } = useReducedMotion()
-const { matches: isMobile } = useMediaQuery('(max-width: 768px)')
+const { isLowPower } = useLowPower()
 let cardsTween: gsap.core.Tween | null = null
 let fallbackTimer: ReturnType<typeof setTimeout> | null = null
 
 onMounted(() => {
   const grid = gridRef.value
-  if (!grid || shouldReduceMotion.value || isMobile.value) return
+  if (!grid || shouldReduceMotion.value || isLowPower.value) return
 
   registerGsap()
 

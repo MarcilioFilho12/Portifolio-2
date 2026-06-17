@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 import { gsap, registerGsap, ScrollTrigger } from '@/composables/useGsap'
-import { useMediaQuery } from '@/composables/useMediaQuery'
+import { useLowPower } from '@/composables/useLowPower'
 import { useReducedMotion } from '@/composables/useReducedMotion'
 
 const root = ref<HTMLElement | null>(null)
 const { shouldReduceMotion } = useReducedMotion()
-const { matches: isMobile } = useMediaQuery('(max-width: 768px)')
+const { isLowPower } = useLowPower()
 let tween: gsap.core.Tween | null = null
 let fallbackTimer: ReturnType<typeof setTimeout> | null = null
 
@@ -16,7 +16,7 @@ const forceVisible = (el: HTMLElement) => {
 
 onMounted(() => {
   const el = root.value
-  if (!el || shouldReduceMotion.value || isMobile.value) return
+  if (!el || shouldReduceMotion.value || isLowPower.value) return
 
   registerGsap()
 

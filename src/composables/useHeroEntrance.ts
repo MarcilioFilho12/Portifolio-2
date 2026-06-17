@@ -1,25 +1,32 @@
 import { onMounted, onUnmounted, watch, type ComputedRef, type Ref } from 'vue'
 import { gsap, registerGsap } from '@/composables/useGsap'
 import { playHeroEntrance } from '@/animations/heroEntrance'
-import { useMediaQuery } from './useMediaQuery'
+import { useLowPower } from './useLowPower'
 import { useReducedMotion } from './useReducedMotion'
 
+const INTRO_KEY = 'portfolio-intro-seen'
 const FALLBACK_MS = 3200
-const FALLBACK_MS_MOBILE = 900
+const FALLBACK_MS_LOW_POWER = 900
+
+const introSeenOnLoad =
+  typeof sessionStorage !== 'undefined' && !!sessionStorage.getItem(INTRO_KEY)
 
 export function useHeroEntrance(
   rootRef: Ref<HTMLElement | null>,
   entranceReady: Ref<boolean> | ComputedRef<boolean>,
+  readyRef?: Ref<boolean>,
 ) {
   const { shouldReduceMotion } = useReducedMotion()
-  const { matches: isMobile } = useMediaQuery('(max-width: 768px)')
+  const { isLowPower } = useLowPower()
   let played = false
   let fallbackTimer: ReturnType<typeof setTimeout> | null = null
 
-  const shouldSkipMotion = () => shouldReduceMotion.value || isMobile.value
+  const shouldSkipMotion = () =>
+    shouldReduceMotion.value || isLowPower.value || introSeenOnLoad
 
   const revealVisible = (root: HTMLElement) => {
     root.classList.add('is-ready')
+    if (readyRef) readyRef.value = true
     clearPendingState(root)
   }
 
@@ -73,7 +80,7 @@ export function useHeroEntrance(
 
   const scheduleFallback = () => {
     if (fallbackTimer) clearTimeout(fallbackTimer)
-    const delay = isMobile.value ? FALLBACK_MS_MOBILE : FALLBACK_MS
+    const delay = isLowPower.value ? FALLBACK_MS_LOW_POWER : FALLBACK_MS
     fallbackTimer = setTimeout(() => {
       const root = rootRef.value
       if (!root || played) return
@@ -97,7 +104,7 @@ export function useHeroEntrance(
   })
 
   watch(
-    [entranceReady, rootRef, shouldReduceMotion, isMobile],
+    [entranceReady, rootRef, shouldReduceMotion, isLowPower],
     () => {
       const root = rootRef.value
       if (!root) return
@@ -117,3 +124,5 @@ export function useHeroEntrance(
     if (fallbackTimer) clearTimeout(fallbackTimer)
   })
 }
+
+export { INTRO_KEY as HERO_INTRO_KEY }

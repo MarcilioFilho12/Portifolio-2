@@ -104,4 +104,17 @@
     padding-bottom: 0;
     padding-top: 0;
   }
+
+  .hero-section:not(.is-ready) [data-hero-canvas] {
+    opacity: 0;
+  }
+
+  .hero-section:not(.is-ready) [data-reveal]:not([data-reveal='mask']) {
+    opacity: 0;
+  }
+
+  .hero-section:not(.is-ready) .split-word {
+    opacity: 0;
+    transform: translateY(110%);
+  }
 }

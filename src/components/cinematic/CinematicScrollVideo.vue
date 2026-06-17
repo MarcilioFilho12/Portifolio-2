@@ -1,13 +1,47 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useVideoOnScroll } from '@/composables/useVideoOnScroll'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useLocale } from '@/composables/useLocale'
+import { useLowPower } from '@/composables/useLowPower'
+import { useReducedMotion } from '@/composables/useReducedMotion'
+
+const { shouldReduceMotion } = useReducedMotion()
+const { isLowPower } = useLowPower()
+const { t } = useLocale()
 
 const sectionRef = ref<HTMLElement | null>(null)
 const videoRef = ref<HTMLVideoElement | null>(null)
+let observer: IntersectionObserver | null = null
 
-const { shouldReduceMotion, isMobile } = useVideoOnScroll(sectionRef, videoRef)
-const { t } = useLocale()
+const useStaticBackdrop = computed(() => shouldReduceMotion.value)
+
+const playVideo = () => {
+  const video = videoRef.value
+  if (!video || useStaticBackdrop.value) return
+  if (isLowPower.value) video.playbackRate = 0.9
+  video.play().catch(() => {})
+}
+
+onMounted(() => {
+  const section = sectionRef.value
+  const video = videoRef.value
+  if (!section || !video || useStaticBackdrop.value) return
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      const entry = entries[0]
+      if (!entry) return
+      if (entry.isIntersecting) playVideo()
+      else video.pause()
+    },
+    { threshold: isLowPower.value ? 0.15 : 0.25 },
+  )
+  observer.observe(section)
+})
+
+onUnmounted(() => {
+  observer?.disconnect()
+  videoRef.value?.pause()
+})
 </script>
 
 <template>
@@ -20,8 +54,8 @@ const { t } = useLocale()
     <p class="sr-only">{{ t('cinematic.srOnly') }}</p>
 
     <div
-      v-if="shouldReduceMotion"
-      class="absolute inset-0 bg-[radial-gradient(circle_at_center,color-mix(in_srgb,#6565c0_25%,transparent),#07070d)]"
+      v-if="useStaticBackdrop"
+      class="absolute inset-0 bg-[radial-gradient(circle_at_center,color-mix(in_srgb,#6565c0_22%,transparent),#07070d)]"
       aria-hidden="true"
     />
 
@@ -29,11 +63,10 @@ const { t } = useLocale()
       v-else
       ref="videoRef"
       class="cinematic-video absolute inset-0 h-full w-full object-cover"
-      :class="isMobile ? 'cinematic-video--mobile' : ''"
       muted
       loop
       playsinline
-      :preload="isMobile ? 'metadata' : 'none'"
+      :preload="isLowPower ? 'metadata' : 'auto'"
       aria-hidden="true"
       poster="/media/kling-poster.svg"
     >
@@ -46,11 +79,6 @@ const { t } = useLocale()
     />
     <div
       class="pointer-events-none absolute inset-0 bg-gradient-to-r from-bg/40 via-transparent to-bg/40"
-      aria-hidden="true"
-    />
-    <div
-      v-if="isMobile && !shouldReduceMotion"
-      class="pointer-events-none absolute inset-0 bg-bg/25"
       aria-hidden="true"
     />
 
@@ -67,11 +95,3 @@ const { t } = useLocale()
     </div>
   </section>
 </template>
-
-<style scoped>
-.cinematic-video--mobile {
-  opacity: 0.88;
-  filter: saturate(0.9) contrast(1.02);
-  transform: scale(1.02);
-}
-</style>

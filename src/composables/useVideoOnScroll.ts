@@ -1,6 +1,5 @@
 import { onMounted, onUnmounted, ref, type Ref } from 'vue'
 import { useReducedMotion } from './useReducedMotion'
-import { useMediaQuery } from './useMediaQuery'
 
 export function useVideoOnScroll(
   sectionRef: Ref<HTMLElement | null>,
@@ -8,7 +7,6 @@ export function useVideoOnScroll(
 ) {
   const isPlaying = ref(false)
   const { shouldReduceMotion } = useReducedMotion()
-  const { matches: isMobile } = useMediaQuery('(max-width: 768px)')
 
   let observer: IntersectionObserver | null = null
 
@@ -25,9 +23,6 @@ export function useVideoOnScroll(
         if (!entry) return
 
         if (entry.isIntersecting && canPlayVideo()) {
-          if (isMobile.value) {
-            video.playbackRate = 0.85
-          }
           void video.play().then(() => {
             isPlaying.value = true
           }).catch(() => {
@@ -38,7 +33,7 @@ export function useVideoOnScroll(
           isPlaying.value = false
         }
       },
-      { threshold: isMobile.value ? 0.2 : 0.35 },
+      { threshold: 0.25 },
     )
 
     observer.observe(section)
@@ -49,5 +44,5 @@ export function useVideoOnScroll(
     videoRef.value?.pause()
   })
 
-  return { isPlaying, shouldReduceMotion, isMobile }
+  return { isPlaying, shouldReduceMotion }
 }

@@ -1,38 +1,46 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 import { gsap, registerGsap } from '@/composables/useGsap'
+import { useLowPower } from '@/composables/useLowPower'
 import { useReducedMotion } from '@/composables/useReducedMotion'
 import { useLocale } from '@/composables/useLocale'
+import { HERO_INTRO_KEY } from '@/composables/useHeroEntrance'
 
 const { t } = useLocale()
-
-const STORAGE_KEY = 'portfolio-intro-seen'
 
 const emit = defineEmits<{
   complete: []
 }>()
 
 const { shouldReduceMotion } = useReducedMotion()
-const visible = ref(!sessionStorage.getItem(STORAGE_KEY))
+const { isLowPower } = useLowPower()
+const visible = ref(!sessionStorage.getItem(HERO_INTRO_KEY))
 const rootRef = ref<HTMLElement | null>(null)
 let autoTimer: ReturnType<typeof setTimeout> | null = null
+let completeEmitted = false
+
+const emitComplete = () => {
+  if (completeEmitted) return
+  completeEmitted = true
+  emit('complete')
+}
 
 const finish = () => {
   if (!visible.value) return
-  sessionStorage.setItem(STORAGE_KEY, '1')
+  sessionStorage.setItem(HERO_INTRO_KEY, '1')
   visible.value = false
-  emit('complete')
+  emitComplete()
 }
 
 const skip = () => finish()
 
 onMounted(() => {
   if (!visible.value) {
-    emit('complete')
+    emitComplete()
     return
   }
 
-  if (shouldReduceMotion.value) {
+  if (shouldReduceMotion.value || isLowPower.value) {
     finish()
     return
   }
@@ -43,16 +51,18 @@ onMounted(() => {
     gsap.fromTo(
       root.querySelector('[data-intro="logo"]'),
       { scale: 0.92, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 0.8, ease: 'power3.out' },
+      { scale: 1, opacity: 1, duration: 0.7, ease: 'power3.out' },
     )
     gsap.fromTo(
       root.querySelector('[data-intro="bar"]'),
       { scaleX: 0 },
-      { scaleX: 1, duration: 1.6, ease: 'power2.inOut', delay: 0.2 },
+      { scaleX: 1, duration: 1.2, ease: 'power2.inOut', delay: 0.15 },
     )
   }
 
   autoTimer = setTimeout(() => {
+    emitComplete()
+
     const el = rootRef.value
     if (!el) {
       finish()
@@ -60,11 +70,11 @@ onMounted(() => {
     }
     gsap.to(el, {
       opacity: 0,
-      duration: 0.5,
+      duration: 0.4,
       ease: 'power2.in',
       onComplete: finish,
     })
-  }, 2400)
+  }, 1400)
 })
 
 onUnmounted(() => {
