@@ -15,6 +15,19 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    id: 'passo-a-passo',
+    title: 'Passo a Passo',
+    category: 'Site institucional',
+    description:
+      'Site da recreação infantil em Garopaba — acolhimento, rotina vespertina e contato com as famílias.',
+    stack: ['Vue 3', 'TypeScript', 'Tailwind CSS'],
+    href: 'https://passoa-passo.vercel.app/',
+    image: '/media/projects/passo-a-passo.svg',
+    imageAlt: 'Passo a Passo Recreação Infantil — hero acolhedor',
+    imageBg: '#faf6f0',
+    imageFit: 'cover',
+  },
+  {
     id: 'soumed',
     title: 'Soumed',
     category: 'Frontend',

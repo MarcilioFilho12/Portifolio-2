@@ -58,7 +58,7 @@ onUnmounted(() => {
       <p class="mt-3 max-w-xl text-text-muted">
         {{ t('projects.subtitle') }}
       </p>
-      <div ref="gridRef" class="mt-12 grid gap-6 sm:grid-cols-2">
+      <div ref="gridRef" class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <ProjectCard v-for="p in projects" :key="p.id" :project="p" />
       </div>
     </SectionReveal>

@@ -51,8 +51,14 @@ export const messages = {
       srOnly: 'Sequência visual em movimento representando atmosfera digital futurista do portfólio.',
     },
     projects: {
-      title: 'Projetos selecionados',
-      subtitle: 'Checkout digital e landing de marca — design e front-end em produção.',
+      title: 'Projetos feitos',
+      subtitle: 'Sites, checkouts e experiências digitais entregues em produção.',
+      passoAPasso: {
+        category: 'Site institucional',
+        description:
+          'Site da Passo a Passo — recreação infantil em Garopaba, com foco em acolhimento, rotina vespertina e contato com as famílias.',
+        imageAlt: 'Passo a Passo Recreação Infantil — hero com proposta acolhedora',
+      },
       soumed: {
         category: 'Front-end',
         description: 'Checkout e fluxos digitais para operação de convênio médico.',
@@ -157,8 +163,14 @@ export const messages = {
       srOnly: 'Moving visual sequence representing the portfolio’s futuristic digital atmosphere.',
     },
     projects: {
-      title: 'Selected projects',
-      subtitle: 'Digital checkout and brand landing — design and front-end in production.',
+      title: 'Built projects',
+      subtitle: 'Sites, checkouts, and digital experiences shipped to production.',
+      passoAPasso: {
+        category: 'Institutional site',
+        description:
+          'Passo a Passo website — child recreation in Garopaba, focused on care, afternoon routine, and family contact.',
+        imageAlt: 'Passo a Passo child recreation — welcoming hero section',
+      },
       soumed: {
         category: 'Frontend',
         description: 'Checkout and digital flows for medical plan operations.',
