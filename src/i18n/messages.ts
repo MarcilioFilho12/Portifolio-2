@@ -27,9 +27,9 @@ export const messages = {
           { word: 'cinema.', glow: false, italic: false },
         ] as const,
       },
-      metaFolio: 'Folio / 2026 — Vol.01',
-      metaCinematic: '— Um portfólio cinematográfico',
-      metaLocation: 'Lisboa · Latitude 38.7°N',
+      metaFolio: '',
+      metaCinematic: '',
+      metaLocation: '',
       subline:
         'Marcílio Alano Filho — desenvolvedor criativo criando experiências web imersivas para marcas ambiciosas, estúdios de IA e produtos de tecnologia.',
       ctaWork: 'Ver projetos',
@@ -139,7 +139,7 @@ export const messages = {
           { word: 'cinema.', glow: false, italic: false },
         ] as const,
       },
-      metaFolio: 'Folio / 2026 — Vol.01',
+      metaFolio: '',
       metaCinematic: '— A cinematic folio',
       metaLocation: 'Lisbon · Latitude 38.7°N',
       subline:

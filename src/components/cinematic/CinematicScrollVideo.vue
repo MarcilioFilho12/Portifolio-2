@@ -70,7 +70,7 @@ onUnmounted(() => {
       aria-hidden="true"
       poster="/media/kling-poster.svg"
     >
-      <source src="/media/kling-scroll.mp4" type="video/mp4" />
+      <source src="/media/kling-scroll.webm" type="video/webm" />
     </video>
 
     <div

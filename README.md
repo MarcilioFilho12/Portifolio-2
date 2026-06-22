@@ -25,4 +25,4 @@ npm run build
 
 ## Vídeo
 
-Arquivo: `public/media/kling-scroll.mp4` (copiado do Kling AI).
+Arquivo: `public/media/kling-scroll.webm` (copiado do Kling AI).

@@ -5,7 +5,7 @@ import { useReducedMotion } from '@/composables/useReducedMotion'
 import { useLowPower } from '@/composables/useLowPower'
 import { useLocale } from '@/composables/useLocale'
 
-const ABOUT_VIDEO = '/media/about-ai-man-nod.mp4'
+const ABOUT_VIDEO = '/media/about-ai-man-nod.webm'
 
 const { shouldReduceMotion } = useReducedMotion()
 const { isLowPower } = useLowPower()
