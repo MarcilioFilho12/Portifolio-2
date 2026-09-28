@@ -15,12 +15,15 @@ export interface HeroSceneOptions {
   lite?: boolean
   /** Rotação contínua do cérebro (mobile) */
   autoRotate?: boolean
+  /** GLB ausente — o chamador pode cair no fundo em CSS */
+  onUnavailable?: () => void
 }
 
 export interface HeroSceneHandle {
   resize: () => void
   setPointer: (nx: number, ny: number) => void
   setWheelDelta: (delta: number) => void
+  setRunning: (running: boolean) => void
   dispose: () => void
 }
 
@@ -28,7 +31,7 @@ export function createHeroScene(
   container: HTMLElement,
   options: HeroSceneOptions = {},
 ): HeroSceneHandle {
-  const { lite = false, autoRotate = false } = options
+  const { lite = false, autoRotate = false, onUnavailable } = options
   const width = container.clientWidth || window.innerWidth
   const height = container.clientHeight || window.innerHeight
   const pixelCap = lite ? MOBILE_PIXEL_RATIO_CAP : STARFIELD_PIXEL_RATIO_CAP
@@ -70,10 +73,19 @@ export function createHeroScene(
   let pointerX = 0
   let pointerY = 0
   let rafId = 0
+  let alive = true
+  let running = true
   const clock = new THREE.Clock()
 
   loadBrainModel().then((result) => {
-    if (!result) return
+    if (!alive) {
+      if (result) disposeBrain(result.root)
+      return
+    }
+    if (!result) {
+      onUnavailable?.()
+      return
+    }
     brainRoot = result.root
     brainRoot.visible = false
     brainRoot.traverse((obj) => {
@@ -90,6 +102,9 @@ export function createHeroScene(
   })
 
   const tick = () => {
+    rafId = 0
+    if (!running) return
+
     const delta = clock.getDelta()
     const t = clock.getElapsedTime()
 
@@ -144,8 +159,23 @@ export function createHeroScene(
     renderer.setSize(w, h)
   }
 
-  const dispose = () => {
+  const setRunning = (next: boolean) => {
+    if (next === running) return
+    running = next
+    if (running) {
+      clock.getDelta()
+      if (!rafId) rafId = requestAnimationFrame(tick)
+      return
+    }
     cancelAnimationFrame(rafId)
+    rafId = 0
+  }
+
+  const dispose = () => {
+    alive = false
+    running = false
+    cancelAnimationFrame(rafId)
+    rafId = 0
     if (brainRoot) {
       disposeBrain(brainRoot)
       brainHolder.remove(brainRoot)
@@ -167,6 +197,7 @@ export function createHeroScene(
     setWheelDelta: (delta: number) => {
       brainRotationTarget += delta * WHEEL_SENSITIVITY
     },
+    setRunning,
     dispose,
   }
 }

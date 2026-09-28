@@ -32,7 +32,7 @@ if (typeof window !== 'undefined') {
   getConnection()?.addEventListener?.('change', refresh)
 }
 
-/** Mobile, save-data ou dispositivos fracos — experiência leve sem WebGL/vídeo/partículas. */
+/** Mobile ou save-data: corta Lenis, sparkles e motion pesado. O hero 3D segue em modo leve. */
 export function useLowPower() {
   return {
     isLowPower: computed(() => isLowPower.value),

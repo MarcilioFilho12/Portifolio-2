@@ -1,16 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useLowPower } from '@/composables/useLowPower'
 import { useThreeHero } from '@/composables/useThreeHero'
 
 const containerRef = ref<HTMLElement | null>(null)
-const { isLowPower } = useLowPower()
-useThreeHero(containerRef)
+const { sceneActive } = useThreeHero(containerRef)
 </script>
 
 <template>
   <div
-    v-if="isLowPower"
+    v-if="!sceneActive"
     class="hero-lite-fallback pointer-events-none absolute inset-0 z-0 overflow-hidden"
     aria-hidden="true"
   >
