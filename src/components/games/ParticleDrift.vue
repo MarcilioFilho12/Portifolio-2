@@ -34,7 +34,7 @@ function resize() {
   const rect = canvas.getBoundingClientRect()
   width = rect.width
   height = rect.height
-  const dpr = Math.min(window.devicePixelRatio || 1, 2)
+  const dpr = Math.min(window.devicePixelRatio || 1, isLowPower.value ? 1 : 2)
   const nextWidth = Math.max(1, Math.floor(width * dpr))
   const nextHeight = Math.max(1, Math.floor(height * dpr))
   if (canvas.width !== nextWidth || canvas.height !== nextHeight) {
@@ -132,13 +132,22 @@ function draw(frozen: boolean) {
   }
 }
 
-function tick() {
+function tick(now = performance.now()) {
+  if (isLowPower.value) {
+    frame = window.setTimeout(() => {
+      draw(false)
+      frame = window.requestAnimationFrame(tick)
+    }, 34) as unknown as number
+    return
+  }
+  void now
   draw(false)
   frame = window.requestAnimationFrame(tick)
 }
 
 function stop() {
   window.cancelAnimationFrame(frame)
+  window.clearTimeout(frame)
   frame = 0
 }
 
@@ -195,8 +204,10 @@ onMounted(() => {
     observer.observe(canvas)
   }
   paint()
-  window.addEventListener('pointermove', onPointer)
-  document.addEventListener('pointerleave', onLeave)
+  if (!isLowPower.value) {
+    window.addEventListener('pointermove', onPointer)
+    document.addEventListener('pointerleave', onLeave)
+  }
   document.addEventListener('visibilitychange', onVisibility)
 })
 

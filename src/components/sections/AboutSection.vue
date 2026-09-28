@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import SectionReveal from '@/components/ui/SectionReveal.vue'
 import { useReducedMotion } from '@/composables/useReducedMotion'
 import { useLowPower } from '@/composables/useLowPower'
@@ -12,13 +12,19 @@ const { isLowPower } = useLowPower()
 const { t } = useLocale()
 const videoRef = ref<HTMLVideoElement | null>(null)
 const mediaRef = ref<HTMLElement | null>(null)
+const videoSrc = ref(isLowPower.value ? '' : ABOUT_VIDEO)
 let observer: IntersectionObserver | null = null
 
 const useStaticPreview = computed(() => shouldReduceMotion.value)
 
-const playVideo = () => {
+const playVideo = async () => {
   const video = videoRef.value
   if (!video || useStaticPreview.value) return
+  if (isLowPower.value && !videoSrc.value) {
+    videoSrc.value = ABOUT_VIDEO
+    await nextTick()
+    video.load()
+  }
   if (isLowPower.value) video.playbackRate = 0.9
   video.play().catch(() => {})
 }
@@ -76,11 +82,11 @@ onUnmounted(() => {
           ref="videoRef"
           class="h-full w-full object-cover"
           :class="isLowPower ? 'opacity-95' : ''"
-          :src="ABOUT_VIDEO"
+          :src="videoSrc"
           muted
           loop
           playsinline
-          :preload="isLowPower ? 'metadata' : 'auto'"
+          :preload="isLowPower ? 'none' : 'auto'"
           :aria-label="t('about.videoLabel')"
         />
         <div

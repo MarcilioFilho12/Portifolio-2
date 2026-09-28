@@ -15,13 +15,15 @@ export function centerAndScale(object: THREE.Object3D): void {
   }
 }
 
-export async function loadBrainModel(): Promise<{
+export async function loadBrainModel(
+  urls: readonly string[] = BRAIN_GLB_URLS,
+): Promise<{
   root: THREE.Group
   materials: THREE.MeshStandardMaterial[]
 } | null> {
   const loader = new GLTFLoader()
 
-  for (const url of BRAIN_GLB_URLS) {
+  for (const url of urls) {
     try {
       const gltf = await loader.loadAsync(url)
       const root = gltf.scene as THREE.Group

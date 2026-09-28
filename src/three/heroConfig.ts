@@ -1,5 +1,8 @@
-/** URLs tentadas em ordem (não usar modelToUsed.glb em produção). */
+/** URLs tentadas em ordem no notebook (não usar modelToUsed.glb em produção). */
 export const BRAIN_GLB_URLS = ['/media/brain-hero.glb', '/media/brain_hologram.glb'] as const
+
+/** No celular o arquivo otimizado ainda não existe; evita o 404 antes do parse. */
+export const PHONE_BRAIN_GLB_URLS = ['/media/brain_hologram.glb'] as const
 
 export const BRAIN_TARGET_SIZE = 7.2
 
@@ -12,7 +15,7 @@ export const BRAIN_ROTATION_LERP = 0.12
 /** Rotação contínua lenta no mobile (rad/s) */
 export const BRAIN_AUTO_ROTATE_SPEED = 0.1
 
-export const MOBILE_PIXEL_RATIO_CAP = 1.35
+export const MOBILE_PIXEL_RATIO_CAP = 1
 
 export const HERO_COLORS = {
   bg: 0x07070d,

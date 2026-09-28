@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import {
   BRAIN_AUTO_ROTATE_SPEED,
+  BRAIN_GLB_URLS,
   BRAIN_ROTATION_LERP,
   CAMERA,
   HERO_COLORS,
@@ -17,6 +18,8 @@ export interface HeroSceneOptions {
   autoRotate?: boolean
   /** GLB ausente — o chamador pode cair no fundo em CSS */
   onUnavailable?: () => void
+  /** Lista de GLB. No celular, só o arquivo que existe. */
+  modelUrls?: readonly string[]
 }
 
 export interface HeroSceneHandle {
@@ -31,7 +34,8 @@ export function createHeroScene(
   container: HTMLElement,
   options: HeroSceneOptions = {},
 ): HeroSceneHandle {
-  const { lite = false, autoRotate = false, onUnavailable } = options
+  const { lite = false, autoRotate = false, onUnavailable, modelUrls = BRAIN_GLB_URLS } = options
+  const frameGap = lite ? 34 : 0
   const width = container.clientWidth || window.innerWidth
   const height = container.clientHeight || window.innerHeight
   const pixelCap = lite ? MOBILE_PIXEL_RATIO_CAP : STARFIELD_PIXEL_RATIO_CAP
@@ -52,9 +56,9 @@ export function createHeroScene(
   renderer.setClearColor(0x000000, 0)
   container.appendChild(renderer.domElement)
 
-  const starfield = createStarfield(width, height, { lite })
-  const points = starfield.points
-  scene.add(points)
+  const starfield = lite ? null : createStarfield(width, height)
+  const points = starfield?.points ?? null
+  if (points) scene.add(points)
 
   const brainHolder = new THREE.Group()
   brainHolder.renderOrder = 1
@@ -75,9 +79,29 @@ export function createHeroScene(
   let rafId = 0
   let alive = true
   let running = true
+  let timeoutId = 0
   const clock = new THREE.Clock()
 
-  loadBrainModel().then((result) => {
+  const cancelLoop = () => {
+    cancelAnimationFrame(rafId)
+    window.clearTimeout(timeoutId)
+    rafId = 0
+    timeoutId = 0
+  }
+
+  const schedule = () => {
+    if (!running || !alive) return
+    if (frameGap) {
+      timeoutId = window.setTimeout(() => {
+        timeoutId = 0
+        rafId = requestAnimationFrame(tick)
+      }, frameGap)
+      return
+    }
+    rafId = requestAnimationFrame(tick)
+  }
+
+  loadBrainModel(modelUrls).then((result) => {
     if (!alive) {
       if (result) disposeBrain(result.root)
       return
@@ -108,11 +132,11 @@ export function createHeroScene(
     const delta = clock.getDelta()
     const t = clock.getElapsedTime()
 
-    starfield.setTime(t)
-
-    const starSpeed = lite ? 0.03 : 0.04
-    points.rotation.y = t * starSpeed + pointerX * 0.12
-    points.rotation.x = pointerY * 0.06
+    if (starfield && points) {
+      starfield.setTime(t)
+      points.rotation.y = t * 0.04 + pointerX * 0.12
+      points.rotation.x = pointerY * 0.06
+    }
 
     if (autoRotate) {
       brainRotationTarget += delta * BRAIN_AUTO_ROTATE_SPEED
@@ -145,7 +169,7 @@ export function createHeroScene(
     camera.position.y += (-pointerY * (parallax * 0.6) - camera.position.y) * 0.05
     camera.lookAt(0, 0, 0)
     renderer.render(scene, camera)
-    rafId = requestAnimationFrame(tick)
+    schedule()
   }
 
   tick()
@@ -164,24 +188,22 @@ export function createHeroScene(
     running = next
     if (running) {
       clock.getDelta()
-      if (!rafId) rafId = requestAnimationFrame(tick)
+      if (!rafId && !timeoutId) schedule()
       return
     }
-    cancelAnimationFrame(rafId)
-    rafId = 0
+    cancelLoop()
   }
 
   const dispose = () => {
     alive = false
     running = false
-    cancelAnimationFrame(rafId)
-    rafId = 0
+    cancelLoop()
     if (brainRoot) {
       disposeBrain(brainRoot)
       brainHolder.remove(brainRoot)
       brainRoot = null
     }
-    starfield.dispose()
+    starfield?.dispose()
     renderer.dispose()
     if (renderer.domElement.parentElement === container) {
       container.removeChild(renderer.domElement)

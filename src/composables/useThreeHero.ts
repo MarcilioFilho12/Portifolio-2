@@ -1,5 +1,7 @@
 import { onMounted, onUnmounted, ref, watch, type Ref } from 'vue'
+import { PHONE_BRAIN_GLB_URLS } from '@/three/heroConfig'
 import type { HeroSceneHandle } from '@/three/heroScene'
+import { detectHeroPresentation } from './useHeroPresentation'
 import { useLowPower } from './useLowPower'
 import { useReducedMotion } from './useReducedMotion'
 
@@ -24,6 +26,8 @@ export function useThreeHero(containerRef: Ref<HTMLElement | null>) {
   let closed = false
   let liteMode = false
   let heroVisible = true
+  let scrolling = false
+  let scrollTimer = 0
 
   const onPointer = (event: PointerEvent) => {
     if (!handle) return
@@ -48,7 +52,18 @@ export function useThreeHero(containerRef: Ref<HTMLElement | null>) {
   const onResize = () => handle?.resize()
 
   const syncRunning = () => {
-    handle?.setRunning(heroVisible && !document.hidden)
+    handle?.setRunning(heroVisible && !document.hidden && !scrolling)
+  }
+
+  const onScroll = () => {
+    if (!liteMode || !handle) return
+    scrolling = true
+    handle.setRunning(false)
+    window.clearTimeout(scrollTimer)
+    scrollTimer = window.setTimeout(() => {
+      scrolling = false
+      syncRunning()
+    }, 150)
   }
 
   const onVisibility = () => syncRunning()
@@ -61,6 +76,9 @@ export function useThreeHero(containerRef: Ref<HTMLElement | null>) {
     window.removeEventListener('pointercancel', onPointerUp)
     window.removeEventListener('resize', onResize)
     document.removeEventListener('visibilitychange', onVisibility)
+    window.removeEventListener('scroll', onScroll)
+    window.clearTimeout(scrollTimer)
+    scrolling = false
     observer?.disconnect()
     observer = null
   }
@@ -74,11 +92,15 @@ export function useThreeHero(containerRef: Ref<HTMLElement | null>) {
 
   function bind(lite: boolean) {
     heroEl = document.getElementById('hero')
-    if (!lite) heroEl?.addEventListener('wheel', onWheel, { passive: false })
-    window.addEventListener('pointerdown', onPointer, { passive: true })
-    window.addEventListener('pointermove', onPointer, { passive: true })
-    window.addEventListener('pointerup', onPointerUp, { passive: true })
-    window.addEventListener('pointercancel', onPointerUp, { passive: true })
+    if (!lite) {
+      heroEl?.addEventListener('wheel', onWheel, { passive: false })
+      window.addEventListener('pointerdown', onPointer, { passive: true })
+      window.addEventListener('pointermove', onPointer, { passive: true })
+      window.addEventListener('pointerup', onPointerUp, { passive: true })
+      window.addEventListener('pointercancel', onPointerUp, { passive: true })
+    } else {
+      window.addEventListener('scroll', onScroll, { passive: true })
+    }
     window.addEventListener('resize', onResize, { passive: true })
     document.addEventListener('visibilitychange', onVisibility)
 
@@ -98,12 +120,13 @@ export function useThreeHero(containerRef: Ref<HTMLElement | null>) {
     stopHandle()
 
     const el = containerRef.value
-    if (closed || !el || shouldReduceMotion.value || !webglOk()) {
+    const presentation = detectHeroPresentation()
+    if (closed || !el || presentation === 'still' || !webglOk()) {
       sceneActive.value = false
       return
     }
 
-    const lite = isLowPower.value
+    const lite = presentation === 'phone'
     liteMode = lite
     const { createHeroScene } = await import('@/three/heroScene')
     if (token !== generation || closed) return
@@ -114,6 +137,7 @@ export function useThreeHero(containerRef: Ref<HTMLElement | null>) {
     handle = createHeroScene(container, {
       lite,
       autoRotate: lite,
+      modelUrls: lite ? PHONE_BRAIN_GLB_URLS : undefined,
       onUnavailable: () => {
         if (token !== generation) return
         stopHandle()

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { useLocale } from '@/composables/useLocale'
 import { useLowPower } from '@/composables/useLowPower'
 import { useReducedMotion } from '@/composables/useReducedMotion'
@@ -10,13 +10,19 @@ const { t } = useLocale()
 
 const sectionRef = ref<HTMLElement | null>(null)
 const videoRef = ref<HTMLVideoElement | null>(null)
+const sourceOn = ref(!isLowPower.value)
 let observer: IntersectionObserver | null = null
 
 const useStaticBackdrop = computed(() => shouldReduceMotion.value)
 
-const playVideo = () => {
+const playVideo = async () => {
   const video = videoRef.value
   if (!video || useStaticBackdrop.value) return
+  if (isLowPower.value && !sourceOn.value) {
+    sourceOn.value = true
+    await nextTick()
+    video.load()
+  }
   if (isLowPower.value) video.playbackRate = 0.9
   video.play().catch(() => {})
 }
@@ -33,7 +39,7 @@ onMounted(() => {
       if (entry.isIntersecting) playVideo()
       else video.pause()
     },
-    { threshold: isLowPower.value ? 0.15 : 0.25 },
+    { threshold: isLowPower.value ? 0.55 : 0.25 },
   )
   observer.observe(section)
 })
@@ -66,11 +72,11 @@ onUnmounted(() => {
       muted
       loop
       playsinline
-      :preload="isLowPower ? 'metadata' : 'auto'"
+      :preload="isLowPower ? 'none' : 'auto'"
       aria-hidden="true"
       poster="/media/kling-poster.svg"
     >
-      <source src="/media/kling-scroll.webm" type="video/webm" />
+      <source v-if="sourceOn" src="/media/kling-scroll.webm" type="video/webm" />
     </video>
 
     <div

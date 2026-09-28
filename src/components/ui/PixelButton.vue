@@ -33,7 +33,10 @@ const pixelSize = ref(PIXEL_SIZE)
 
 let frame = 0
 let observer: ResizeObserver | null = null
+let viewObserver: IntersectionObserver | null = null
 let reduceQuery: MediaQueryList | null = null
+let narrowQuery: MediaQueryList | null = null
+let onScreen = true
 
 function parseRgb(input: string): [number, number, number] {
   const match = input.match(/\d+(?:\.\d+)?/g)
@@ -126,10 +129,17 @@ function stop() {
   frame = 0
 }
 
+function wantsStillFrame() {
+  const reduced = reduceQuery?.matches ?? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const narrow = narrowQuery?.matches ?? window.matchMedia('(max-width: 768px)').matches
+  return reduced || narrow || !onScreen || document.hidden
+}
+
 function loop(start: number) {
   const tick = (now: number) => {
-    if (document.hidden) {
-      frame = requestAnimationFrame(tick)
+    if (wantsStillFrame()) {
+      frame = 0
+      draw(0)
       return
     }
     draw((now - start) / 1000)
@@ -141,8 +151,7 @@ function loop(start: number) {
 function paint() {
   resize()
   stop()
-  const reduced = reduceQuery?.matches ?? window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  if (reduced) {
+  if (wantsStillFrame()) {
     draw(0)
     return
   }
@@ -172,11 +181,19 @@ watch(
 
 onMounted(() => {
   reduceQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+  narrowQuery = window.matchMedia('(max-width: 768px)')
   reduceQuery.addEventListener('change', onMotionChange)
+  narrowQuery.addEventListener('change', onMotionChange)
+  document.addEventListener('visibilitychange', onMotionChange)
   const canvas = canvasRef.value
   if (canvas) {
     observer = new ResizeObserver(resize)
     observer.observe(canvas)
+    viewObserver = new IntersectionObserver(([entry]) => {
+      onScreen = !!entry?.isIntersecting
+      paint()
+    })
+    viewObserver.observe(canvas)
   }
   paint()
 })
@@ -184,7 +201,10 @@ onMounted(() => {
 onUnmounted(() => {
   stop()
   observer?.disconnect()
+  viewObserver?.disconnect()
   reduceQuery?.removeEventListener('change', onMotionChange)
+  narrowQuery?.removeEventListener('change', onMotionChange)
+  document.removeEventListener('visibilitychange', onMotionChange)
 })
 </script>
 
