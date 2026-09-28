@@ -8,6 +8,7 @@ import HeroFooter from '@/components/hero/HeroFooter.vue'
 import FrameCorners from '@/components/hero/FrameCorners.vue'
 import SecondaryLink from '@/components/ui/SecondaryLink.vue'
 import HoverButton from '@/components/ui/HoverButton.vue'
+import PixelButton from '@/components/ui/PixelButton.vue'
 import ScrollComet from '@/components/hero/ScrollComet.vue'
 import { HERO_INTRO_KEY, useHeroEntrance } from '@/composables/useHeroEntrance'
 import { useLowPower } from '@/composables/useLowPower'
@@ -86,6 +87,9 @@ useHeroEntrance(heroRef, ready, isHeroReady)
           </p>
 
           <div class="mt-10 flex flex-wrap items-center justify-start gap-5">
+            <PixelButton to="/games" data-reveal="cta" data-testid="hero-cta-games">
+              {{ t('nav.games') }}
+            </PixelButton>
             <HoverButton
               data-reveal="cta"
               href="#projetos"

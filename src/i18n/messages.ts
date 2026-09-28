@@ -11,6 +11,7 @@ export const messages = {
       openMenu: 'Abrir menu',
       langLabel: 'Idioma',
       mainNav: 'Navegação principal',
+      games: 'Games',
     },
     hero: {
       headline: {
@@ -105,6 +106,18 @@ export const messages = {
       tagline: 'Vue 3 · TypeScript · Motion design',
       socialNav: 'Redes sociais',
     },
+    games: {
+      title: 'Games',
+      subtitle: 'Peças jogáveis, fora do scroll do portfólio. A home continua no mesmo lugar.',
+      play: 'Jogar',
+      metaTitle: 'Games | Marcílio Alano Filho',
+      playTitle: 'Guerra Ninja | Marcílio Alano Filho',
+      rokenpo: {
+        category: 'Roguelike jogável',
+        title: 'Guerra Ninja',
+        description: 'Três técnicas, um território, uma descida. Taijutsu, ninjutsu e genjutsu decidem cada duelo.',
+      },
+    },
     meta: {
       title: 'Marcílio Alano Filho | Desenvolvedor Frontend',
       description:
@@ -123,6 +136,7 @@ export const messages = {
       openMenu: 'Open menu',
       langLabel: 'Language',
       mainNav: 'Main navigation',
+      games: 'Games',
     },
     hero: {
       headline: {
@@ -216,6 +230,18 @@ export const messages = {
     footer: {
       tagline: 'Vue 3 · TypeScript · Motion design',
       socialNav: 'Social links',
+    },
+    games: {
+      title: 'Games',
+      subtitle: 'Playable pieces, outside the portfolio scroll. Home stays where it is.',
+      play: 'Play',
+      metaTitle: 'Games | Marcílio Alano Filho',
+      playTitle: 'Ninja War | Marcílio Alano Filho',
+      rokenpo: {
+        category: 'Playable roguelike',
+        title: 'Ninja War',
+        description: 'Three techniques, one territory, one descent. Taijutsu, ninjutsu, and genjutsu decide every duel.',
+      },
     },
     meta: {
       title: 'Marcílio Alano Filho | Frontend Developer',

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { RouterLink } from 'vue-router'
 import MaskReveal from '@/components/ui/MaskReveal.vue'
 import LocaleToggle from '@/components/ui/LocaleToggle.vue'
 import { useLocale } from '@/composables/useLocale'
@@ -11,6 +12,7 @@ const navLinks = computed(() => [
   { href: '#projetos', label: t('nav.work'), testId: 'nav-link-work' },
   { href: '#skills', label: t('nav.expertise'), testId: 'nav-link-expertise' },
   { href: '#sobre', label: t('nav.experience'), testId: 'nav-link-experience' },
+  { href: '/games', label: t('nav.games'), testId: 'nav-link-games' },
 ])
 </script>
 
@@ -45,16 +47,25 @@ const navLinks = computed(() => [
         </a>
       </MaskReveal>
 
-      <nav class="hidden items-center gap-9 md:flex" :aria-label="t('nav.mainNav')">
-        <a
-          v-for="link in navLinks"
-          :key="link.href"
-          :href="link.href"
-          :data-testid="link.testId"
-          class="font-mono-label text-[11px] text-text-muted transition-colors duration-300 hover:text-text"
-        >
-          {{ link.label }}
-        </a>
+      <nav class="hidden items-center gap-5 lg:gap-9 md:flex" :aria-label="t('nav.mainNav')">
+        <template v-for="link in navLinks" :key="link.href">
+          <RouterLink
+            v-if="link.href.startsWith('/')"
+            :to="link.href"
+            :data-testid="link.testId"
+            class="font-mono-label text-[11px] text-text-muted transition-colors duration-300 hover:text-text"
+          >
+            {{ link.label }}
+          </RouterLink>
+          <a
+            v-else
+            :href="link.href"
+            :data-testid="link.testId"
+            class="font-mono-label text-[11px] text-text-muted transition-colors duration-300 hover:text-text"
+          >
+            {{ link.label }}
+          </a>
+        </template>
       </nav>
 
       <div class="flex items-center gap-2 md:gap-3">
@@ -119,7 +130,16 @@ const navLinks = computed(() => [
     >
       <ul class="flex flex-col gap-3">
         <li v-for="link in navLinks" :key="link.href">
+          <RouterLink
+            v-if="link.href.startsWith('/')"
+            :to="link.href"
+            class="font-mono-label text-sm text-text"
+            @click="menuOpen = false"
+          >
+            {{ link.label }}
+          </RouterLink>
           <a
+            v-else
             :href="link.href"
             class="font-mono-label text-sm text-text"
             @click="menuOpen = false"
