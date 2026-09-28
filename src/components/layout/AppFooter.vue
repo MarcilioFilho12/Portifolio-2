@@ -15,7 +15,7 @@ const footerLinks = [
 <template>
   <footer class="relative border-t border-glow/15 py-10">
     <div
-      class="mx-auto flex max-w-6xl flex-col gap-6 px-6 text-sm text-text-muted md:flex-row md:items-center md:justify-between"
+      class="mx-auto flex max-w-6xl flex-col gap-6 px-4 text-sm text-text-muted sm:px-6 md:flex-row md:items-center md:justify-between"
     >
       <p>© {{ year }} Marcílio Alano Filho</p>
 

@@ -9,7 +9,6 @@ import FrameCorners from '@/components/hero/FrameCorners.vue'
 import SecondaryLink from '@/components/ui/SecondaryLink.vue'
 import HoverButton from '@/components/ui/HoverButton.vue'
 import PixelButton from '@/components/ui/PixelButton.vue'
-import ScrollComet from '@/components/hero/ScrollComet.vue'
 import { HERO_INTRO_KEY, useHeroEntrance } from '@/composables/useHeroEntrance'
 import { useLowPower } from '@/composables/useLowPower'
 import { useReducedMotion } from '@/composables/useReducedMotion'
@@ -40,7 +39,7 @@ useHeroEntrance(heroRef, ready, isHeroReady)
   <section
     id="hero"
     ref="heroRef"
-    class="hero-section relative flex min-h-[100dvh] w-full flex-col overflow-hidden bg-bg"
+    class="hero-section relative flex min-h-[100dvh] w-full flex-col overflow-x-hidden bg-bg"
     :class="{ 'is-ready': isHeroReady }"
     aria-labelledby="hero-title"
   >
@@ -73,7 +72,7 @@ useHeroEntrance(heroRef, ready, isHeroReady)
 
     <div class="relative z-10 flex flex-1 flex-col">
       <div
-        class="flex flex-1 flex-col items-stretch justify-end px-6 pb-8 pt-4 md:items-start md:justify-center md:px-10 md:pb-0 md:pt-6"
+        class="flex flex-1 flex-col items-stretch justify-end px-4 pb-6 pt-4 sm:px-6 md:items-start md:justify-center md:px-10 md:pb-0 md:pt-6"
       >
         <div class="mx-auto w-full max-w-7xl">
           <HeroHeadline />
@@ -86,7 +85,7 @@ useHeroEntrance(heroRef, ready, isHeroReady)
             {{ t('hero.subline') }}
           </p>
 
-          <div class="mt-10 flex flex-wrap items-center justify-start gap-5">
+          <div class="mt-8 flex flex-col items-start gap-4 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5">
             <PixelButton to="/games" data-reveal="cta" data-testid="hero-cta-games">
               {{ t('nav.games') }}
             </PixelButton>
@@ -112,10 +111,5 @@ useHeroEntrance(heroRef, ready, isHeroReady)
       <HeroFooter />
     </div>
 
-    <div class="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 md:hidden">
-      <a href="#cinematic" class="block" :aria-label="t('hero.scrollCinematic')">
-        <ScrollComet />
-      </a>
-    </div>
   </section>
 </template>

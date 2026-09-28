@@ -8,7 +8,7 @@ const { t } = useLocale()
 <template>
   <div
     data-reveal="meta"
-    class="relative z-10 mx-auto flex w-full max-w-7xl items-start justify-between gap-6 px-6 pt-[5.5rem] md:px-10 md:pt-28"
+    class="relative z-10 mx-auto flex w-full max-w-7xl items-start justify-between gap-4 px-4 pt-[4.75rem] sm:px-6 sm:pt-[5.5rem] md:px-10 md:pt-28"
   >
     <div class="flex flex-col gap-1.5">
       <MaskReveal :delay="0.35">

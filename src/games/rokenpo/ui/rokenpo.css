@@ -50,13 +50,21 @@
   border-bottom: 4px solid var(--rk-blood-deep);
 }
 
-.rokenpo-bar p,
+.rokenpo-bar > p,
 .rokenpo-mobile-stats p {
   margin: 0;
 }
 
+.rokenpo-bar > p {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .rokenpo-bar-actions {
   display: flex;
+  flex-shrink: 0;
   gap: 8px;
 }
 
@@ -214,8 +222,9 @@
   margin: 0;
   color: var(--rk-steel);
   font-size: 16px;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
+  text-wrap: balance;
 }
 
 .rokenpo-kicker {
@@ -322,6 +331,7 @@
 }
 
 .rokenpo-ability {
+  max-width: 100%;
   border: 4px solid var(--rk-blood);
   color: #fecdd3;
   min-height: 44px;
@@ -329,6 +339,7 @@
   font-size: 16px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
   box-shadow: 4px 4px 0 #450a0a;
 }
 
@@ -464,6 +475,18 @@
   color: #fbbf24;
 }
 
+.rokenpo-title.is-compact {
+  font-size: clamp(1.75rem, 9vw, 3rem);
+}
+
+.rokenpo-title.is-enemy {
+  font-size: clamp(1.45rem, 7vw, 2rem);
+}
+
+.rokenpo-meter.is-enemy {
+  max-width: 24rem;
+}
+
 .rk-float { animation: rk-float 3s ease-in-out infinite; }
 .rk-wobble { animation: rk-wobble 2s ease-in-out infinite; }
 .rk-pulse { animation: rk-pulse 2s ease-in-out infinite; }
@@ -514,6 +537,54 @@
 
 .rokenpo[data-territory] .rokenpo-kicker {
   color: var(--rk-accent);
+}
+
+@media (max-width: 640px) {
+  .rokenpo { font-size: 18px; }
+  .rokenpo-bar,
+  .rokenpo-mobile-stats {
+    gap: 8px;
+    padding: 8px 10px;
+  }
+  .rokenpo-mobile-stats {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    font-size: 15px;
+  }
+  .rokenpo-exit {
+    padding: 6px 8px;
+    font-size: 15px;
+    letter-spacing: 0.04em;
+  }
+  .rokenpo-stage {
+    gap: 14px;
+    padding: 16px 12px 12px;
+  }
+  .rokenpo-moves {
+    flex-direction: column;
+    width: min(100%, 22rem);
+  }
+  .rokenpo-move {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 10px;
+    min-height: 64px;
+    padding: 8px 12px;
+  }
+  .rokenpo-move-art,
+  .rokenpo-class-art {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+  .rokenpo-class-art {
+    width: 7rem;
+    height: 7rem;
+  }
+  .rokenpo-actor { --rk-actor-scale: 4; }
+  .rokenpo-stamp {
+    width: 6.5rem;
+    height: 6.5rem;
+  }
 }
 
 @media (max-width: 420px) {

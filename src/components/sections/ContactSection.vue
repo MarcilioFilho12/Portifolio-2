@@ -24,9 +24,9 @@ const contactCv = computed(() =>
 </script>
 
 <template>
-  <section id="contato" class="px-6 py-24" aria-labelledby="contact-title">
+  <section id="contato" class="px-4 py-16 sm:px-6 sm:py-24" aria-labelledby="contact-title">
     <SectionReveal
-      class="mx-auto max-w-6xl rounded-3xl border border-glow/20 bg-bg/50 p-10 text-center backdrop-blur-xl md:p-16"
+      class="mx-auto max-w-6xl rounded-3xl border border-glow/20 bg-bg/50 p-5 text-center backdrop-blur-xl sm:p-10 md:p-16"
     >
       <p class="font-mono-label text-[11px] text-glow/80">{{ t('contact.label') }}</p>
       <h2 id="contact-title" class="mt-3 font-display text-3xl font-medium tracking-tight text-text md:text-4xl">

@@ -50,7 +50,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section id="projetos" class="px-6 py-24" aria-labelledby="projects-title">
+  <section id="projetos" class="px-4 py-16 sm:px-6 sm:py-24" aria-labelledby="projects-title">
     <SectionReveal class="mx-auto max-w-6xl">
       <h2 id="projects-title" class="text-3xl font-semibold text-text md:text-4xl">
         {{ t('projects.title') }}

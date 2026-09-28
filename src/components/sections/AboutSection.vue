@@ -52,7 +52,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section id="sobre" class="px-6 py-24" aria-labelledby="about-title">
+  <section id="sobre" class="px-4 py-16 sm:px-6 sm:py-24" aria-labelledby="about-title">
     <SectionReveal class="mx-auto grid max-w-6xl gap-12 md:grid-cols-2 md:items-center">
       <div>
         <p class="font-mono-label text-[11px] text-glow/80">{{ t('about.label') }}</p>

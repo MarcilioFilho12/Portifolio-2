@@ -82,7 +82,7 @@ onUnmounted(() => {
       aria-hidden="true"
     />
 
-    <div class="relative z-10 flex min-h-[100dvh] items-end px-6 pb-16">
+    <div class="relative z-10 flex min-h-[100dvh] items-end px-4 pb-14 sm:px-6 sm:pb-16">
       <div class="mx-auto w-full max-w-6xl">
         <p class="text-sm uppercase tracking-[0.25em] text-glow/80">{{ t('cinematic.label') }}</p>
         <h2 class="mt-2 max-w-lg text-2xl font-medium text-text md:text-3xl">

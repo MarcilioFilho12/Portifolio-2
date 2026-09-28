@@ -398,11 +398,11 @@ onUnmounted(() => {
         </section>
 
         <section v-else-if="state.view === 'combat' && enemy">
-          <h2 class="rokenpo-title" :class="{ 'is-boss': enemy.type !== 'monster' }" style="font-size: 2rem">
+          <h2 class="rokenpo-title is-enemy" :class="{ 'is-boss': enemy.type !== 'monster' }">
             {{ enemy.name }}
           </h2>
           <p v-if="enemy.type !== 'monster'" class="rokenpo-kicker">{{ copy.boss }}</p>
-          <div class="rokenpo-meter" style="max-width: 24rem">
+          <div class="rokenpo-meter is-enemy">
             <span>{{ copy.hearts }}</span>
             <span class="rokenpo-meter-track"><span class="rokenpo-meter-fill is-heart" :style="{ width: meter(enemy.hearts, enemy.maxHearts) }" /></span>
             <span>{{ Math.max(0, Math.floor(enemy.hearts)) }}/{{ enemy.maxHearts }}</span>
@@ -470,7 +470,7 @@ onUnmounted(() => {
         </section>
 
         <section v-else-if="state.view === 'levelup'">
-          <h2 class="rokenpo-title" style="font-size: 3rem">{{ copy.levelUp }}</h2>
+          <h2 class="rokenpo-title is-compact">{{ copy.levelUp }}</h2>
           <div class="rokenpo-runes-pick">
             <button
               v-for="rune in state.levelUpChoices"
@@ -495,13 +495,13 @@ onUnmounted(() => {
         </section>
 
         <section v-else-if="state.view === 'campfire'" class="rokenpo-actions">
-          <h2 class="rokenpo-title" style="font-size: 3rem">{{ copy.campfire }}</h2>
+          <h2 class="rokenpo-title is-compact">{{ copy.campfire }}</h2>
           <button type="button" class="rokenpo-action" @click="dispatch({ type: 'campfire', choice: 'heal' })">{{ copy.heal }}</button>
           <button type="button" class="rokenpo-action" @click="dispatch({ type: 'campfire', choice: 'shields' })">{{ copy.repair }}</button>
         </section>
 
         <section v-else-if="state.view === 'merchant'" class="rokenpo-actions">
-          <h2 class="rokenpo-title" style="font-size: 3rem">{{ copy.merchant }}</h2>
+          <h2 class="rokenpo-title is-compact">{{ copy.merchant }}</h2>
           <p class="rokenpo-hint">{{ copy.merchantLine }}</p>
           <button type="button" class="rokenpo-action" @click="dispatch({ type: 'continue' })">{{ copy.proceed }}</button>
         </section>
@@ -528,13 +528,13 @@ onUnmounted(() => {
     </div>
 
     <div v-if="confirmExit" class="rokenpo-modal" role="dialog" aria-modal="true" :aria-label="copy.leaveTitle">
-      <h2 class="rokenpo-title" style="font-size: 2.4rem">{{ copy.leaveTitle }}</h2>
+      <h2 class="rokenpo-title is-compact">{{ copy.leaveTitle }}</h2>
       <p class="rokenpo-hint">{{ copy.leaveBody }}</p>
       <button type="button" class="rokenpo-action" @click="confirmExit = false">{{ copy.stay }}</button>
       <button type="button" class="rokenpo-action" @click="leave">{{ copy.leave }}</button>
     </div>
     <div v-else-if="paused" class="rokenpo-modal" role="dialog" aria-modal="true" :aria-label="copy.pause">
-      <h2 class="rokenpo-title" style="font-size: 2.4rem">{{ copy.pause }}</h2>
+      <h2 class="rokenpo-title is-compact">{{ copy.pause }}</h2>
       <button ref="resumeRef" type="button" class="rokenpo-action" @click="paused = false">{{ copy.resume }}</button>
       <button type="button" class="rokenpo-action" @click="requestExit">{{ copy.exit }}</button>
     </div>

@@ -21,12 +21,12 @@ const navLinks = computed(() => [
     class="hero-header fixed inset-x-0 top-0 z-30 w-full border-b border-glow/15 bg-bg/60 backdrop-blur-xl"
   >
     <div
-      class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-5 md:px-10 md:py-6"
+      class="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 sm:px-6 sm:py-5 xl:px-10 xl:py-6"
     >
-      <MaskReveal :delay="0">
+      <MaskReveal :delay="0" class="min-w-0">
         <a
           href="#"
-          class="group inline-flex items-center gap-2.5"
+          class="group inline-flex min-w-0 max-w-full items-center gap-2.5"
           aria-current="page"
           data-testid="nav-wordmark"
         >
@@ -35,19 +35,20 @@ const navLinks = computed(() => [
             aria-hidden="true"
           />
           <span class="inline-flex min-w-0 items-baseline gap-0">
-            <span
-              class="font-display truncate text-[15px] font-semibold tracking-tight text-text max-md:max-w-[10.5rem] sm:max-w-none"
-            >
+            <span class="truncate font-display text-[15px] font-semibold tracking-tight text-text max-[380px]:hidden">
               Marcílio Alano Filho
             </span>
-            <span class="font-mono-label ml-2 hidden text-[10px] text-glow/80 md:inline">
+            <span class="hidden font-display text-[15px] font-semibold tracking-tight text-text max-[380px]:inline">
+              M. Alano
+            </span>
+            <span class="font-mono-label ml-2 hidden whitespace-nowrap text-[10px] text-glow/80 min-[1440px]:inline">
               {{ t('nav.creativeDeveloper') }}
             </span>
           </span>
         </a>
       </MaskReveal>
 
-      <nav class="hidden items-center gap-5 lg:gap-9 md:flex" :aria-label="t('nav.mainNav')">
+      <nav class="hidden items-center gap-6 xl:flex 2xl:gap-9" :aria-label="t('nav.mainNav')">
         <template v-for="link in navLinks" :key="link.href">
           <RouterLink
             v-if="link.href.startsWith('/')"
@@ -74,7 +75,7 @@ const navLinks = computed(() => [
         <a
           href="#contato"
           data-testid="nav-cta-button-mobile"
-          class="group relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-glow/30 bg-bg/40 transition-all duration-500 hover:border-glow/60 md:hidden"
+          class="group relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-glow/30 bg-bg/40 transition-all duration-500 hover:border-glow/60 xl:hidden"
           :aria-label="t('nav.getInTouch')"
         >
           <span
@@ -87,7 +88,7 @@ const navLinks = computed(() => [
           <a
             href="#contato"
             data-testid="nav-cta-button"
-            class="group relative hidden items-center gap-2 rounded-full border border-glow/30 bg-bg/40 px-4 py-2 font-mono-label text-[11px] text-text transition-all duration-500 hover:border-glow/60 md:inline-flex"
+            class="group relative hidden shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-glow/30 bg-bg/40 px-4 py-2 font-mono-label text-[11px] text-text transition-all duration-500 hover:border-glow/60 xl:inline-flex"
           >
             <span class="relative z-10">{{ t('nav.getInTouch') }}</span>
             <span
@@ -103,7 +104,7 @@ const navLinks = computed(() => [
 
         <button
           type="button"
-          class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-glow/25 text-text md:hidden"
+          class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-glow/25 text-text xl:hidden"
           :aria-expanded="menuOpen"
           aria-controls="hero-mobile-nav"
           data-testid="mobile-menu-toggle"
@@ -126,7 +127,7 @@ const navLinks = computed(() => [
     <div
       v-show="menuOpen"
       id="hero-mobile-nav"
-      class="border-t border-glow/15 bg-bg/95 px-6 py-4 backdrop-blur-xl md:hidden"
+      class="border-t border-glow/15 bg-bg/95 px-4 py-4 backdrop-blur-xl sm:px-6 xl:hidden"
     >
       <ul class="flex flex-col gap-3">
         <li v-for="link in navLinks" :key="link.href">

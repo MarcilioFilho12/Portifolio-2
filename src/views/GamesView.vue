@@ -31,22 +31,22 @@ useHead(() => ({
     />
 
     <header class="sticky top-0 z-30 border-b border-white/10 bg-[#030509]/55 backdrop-blur-xl">
-      <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-5">
+      <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6 sm:py-5">
         <RouterLink
           to="/"
-          class="font-display text-[15px] font-semibold tracking-tight text-text"
+          class="min-w-0 truncate font-display text-[15px] font-semibold tracking-tight text-text"
           data-testid="games-home-link"
         >
           Marcílio Alano Filho
         </RouterLink>
-        <div class="flex items-center gap-4">
-          <span class="font-mono-label text-[11px] text-glow">{{ t('nav.games') }}</span>
+        <div class="flex shrink-0 items-center gap-3 sm:gap-4">
+          <span class="font-mono-label hidden text-[11px] text-glow sm:inline">{{ t('nav.games') }}</span>
           <LocaleToggle />
         </div>
       </div>
     </header>
 
-    <main id="games-main" class="relative z-10 mx-auto max-w-6xl px-6 py-16" data-testid="games-page">
+    <main id="games-main" class="relative z-10 mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16" data-testid="games-page">
       <p class="font-mono-label text-[11px] text-glow">{{ t('nav.games') }}</p>
       <h1 class="mt-3 text-3xl font-semibold text-text md:text-4xl">{{ t('games.title') }}</h1>
       <p class="mt-3 max-w-xl text-text-muted">{{ t('games.subtitle') }}</p>

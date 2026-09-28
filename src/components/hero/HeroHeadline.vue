@@ -13,7 +13,7 @@ const { headline } = useHeadline()
     >
       <span
         data-reveal="split"
-        class="hero-headline__brand split-heading block leading-[1.05] tracking-[-0.05em]"
+        class="hero-headline__brand split-heading block leading-[0.95] tracking-[-0.05em] sm:leading-[1.05]"
       >
         <span class="split-word-wrap split-word-wrap--descender mr-[0.06em]">
           <span

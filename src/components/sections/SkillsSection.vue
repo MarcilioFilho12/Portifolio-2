@@ -9,7 +9,7 @@ const { t } = useLocale()
 <template>
   <section
     id="skills"
-    class="relative border-y border-glow/15 px-6 py-24 md:py-28"
+    class="relative border-y border-glow/15 px-4 py-16 sm:px-6 sm:py-24 md:py-28"
     aria-labelledby="skills-title"
   >
     <SectionReveal class="mx-auto max-w-6xl">
